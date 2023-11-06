@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Programa para predecir un número subiendo una imagen</title>
+    <style>
+        body {
+            font-family: Beon;
+            background: linear-gradient(90deg, #350435, #080833, #350435);
+            color: #00a2ff;
+            text-align: center;
+            padding: 350px;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+            background-size: 200% 100%;
+            animation: moveBackground 8s linear infinite;
+        }
+
+
+        @keyframes moveBackground {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+
+
+        h1 {
+            font-size: 40px;
+            font-family: Beon;
+            color: #00a2ff;
+            /* Texto azul claro */
+            text-shadow: 0 0 10px #03d7fc, 0 0 20px #03d7fc, 0 0 30px #03d7fc;
+            /* Sombra de luz en el título */
+            position: relative;
+        }
+
+        h1::before {
+            content: "Programa para predecir un número subiendo una imagen";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 40px;
+            font-family: Beon;
+            color: #ffffff;
+            /* Texto blanco para las líneas blancas */
+            transform: translate(-3px, -3px);
+        }
+
+        p,
+        label,
+        button {
+            color: #ffffff;
+            /* Texto blanco para las líneas blancas */
+            /* Texto morado claro */
+            text-shadow: 0 0 10px #2D85C2, 0 0 20px #2D85C2, 0 0 30px #2D85C2;
+            /* Sombra de luz en otros elementos de texto */
+            font-family: Beon;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            background-color: #A853DC;
+            /* Botón morado claro */
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        label:hover {
+            background-color: #a200ff;
+            /* Botón morado más oscuro al pasar el mouse */
+        }
+
+        #prediction {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #predict-button {
+            background-color: #A853DC;
+            /* Botón morado claro */
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #predict-button:hover {
+            background-color: #a200ff;
+            /* Botón morado más oscuro al pasar el mouse */
+        }
+
+        .author {
+
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 100%;
+            text-align: right;
+            color: #ffffff;
+            /* Texto blanco para las líneas blancas */
+            text-shadow: 0 0 10px #2D85C2, 0 0 20px #2D85C2, 0 0 30px #2D85C2;
+            /* Sombra de luz en el texto del autor */
+        }
+
+        /* Estilo para las líneas con efecto neon y brillo morado */
+        .lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Evita que las líneas interfieran con los elementos */
+            z-index: -1;
+            /* Establece un valor z-index muy bajo para que las líneas estén detrás de otros elementos */
+        }
+
+        .line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #ffffff;
+            /* Color morado oscuro (#800080) */
+            animation: moveLine 4s linear infinite, fadeInOut 4s ease-in-out infinite;
+            box-shadow: 0 0 10px #800080, 0 0 20px #800080, 0 0 30px #800080;
+            /* Añade una sombra morada para simular el brillo */
+        }
+
+        @keyframes moveLine {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        @keyframes fadeInOut {
+
+            0%,
+            100% {
+                /* No es necesario establecer una opacidad inicial */
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Programa para predecir un número subiendo una imagen</h1>
+
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" id="fileInput">
+        <label for="fileInput">Subir imagen</label>
+        <button type="submit" id="predict-button">Predecir</button>
+    </form>
+
+    <p id="prediction"></p>
+
+    <p class="author">by: Alejandro Quishpe</p>
+
+    <!-- Contenedor de las líneas con efecto neon -->
+    <div class="lines">
+        <!-- Líneas con efecto neon -->
+        <div class="line" style="left: 10%; height: 70%;"></div>
+        <div class="line" style="left: 20%; height: 50%;"></div>
+        <div class="line" style="left: 30%; height: 60%;"></div>
+        <div class="line" style="left: 40%; height: 80%;"></div>
+        <div class="line" style="left: 50%; height: 40%;"></div>
+        <div class="line" style="left: 60%; height: 90%;"></div>
+        <div class="line" style="left: 70%; height: 60%;"></div>
+        <div class="line" style="left: 80%; height: 50%;"></div>
+        <div class="line" style="left: 90%; height: 70%;"></div>
+    </div>
+
+    <script>
+        // Obtiene el elemento donde se mostrará la predicción
+        const prediction = document.getElementById("prediction");
+
+        // Cuando el usuario envíe el formulario, realiza la predicción
+        document.querySelector("form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            // Obtiene la imagen del usuario
+            const image = event.target.elements.image.files[0];
+
+            // Envía la imagen al programa de inteligencia artificial
+            const formData = new FormData();
+            formData.append("image", image);
+            const response = await fetch("/predict", {
+                method: "POST",
+                body: formData,
+            });
+
+            // Obtiene la predicción del programa de inteligencia artificial
+            const predictionData = await response.json();
+
+            // Muestra la predicción al usuario
+            prediction.textContent = `Predicción: ${predictionData.prediction}`;
+        });
+    </script>
+</body>
+
+</html>
